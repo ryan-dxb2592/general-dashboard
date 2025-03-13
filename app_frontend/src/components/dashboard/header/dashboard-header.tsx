@@ -17,7 +17,7 @@ const DashboardHeader: React.FC = () => {
     <header
       className={cn(
         "flex items-center justify-between h-16 border-b transition-all duration-300 py-2 fixed  right-0 left-64 z-50 bg-sidebar-primary-foreground dark:bg-sidebar",
-        !open && !isMobile && "h-12 left-16",
+        !open && !isMobile && "h-12 left-[66px]",
         isMobile && "h-16 left-0"
       )}
     >
