@@ -6,14 +6,29 @@ import ThemeToggle from "@/components/common/theme-toggle";
 import NotificationDropdown from "./notification-dropdown";
 import MessagesDropdown from "./messages-dropdown";
 import QuickAddDropdown from "./quick-add-dropdown";
+import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const DashboardHeader: React.FC = () => {
-  const { toggleSidebar } = useSidebar();
+  const { toggleSidebar, open } = useSidebar();
+  const isMobile = useIsMobile();
+
   return (
-    <header className="flex items-center justify-between h-10 ">
+    <header
+      className={cn(
+        "flex items-center justify-between h-16 border-b transition-all duration-300 py-2 fixed  right-0 left-64 z-50 bg-sidebar-primary-foreground dark:bg-sidebar",
+        !open && !isMobile && "h-12 left-16",
+        isMobile && "h-16 left-0"
+      )}
+    >
       <div className="flex flex-1 items-center gap-2 justify-between ">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleSidebar}
+            className="ml-2"
+          >
             <Menu />
           </Button>
         </div>

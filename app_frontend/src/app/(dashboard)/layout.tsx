@@ -6,10 +6,10 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
-        <main>
-          <DashboardHeader />
-          {children}
+      <SidebarInset className="overflow-x-hidden  ">
+        <DashboardHeader />
+        <main className="overflow-x-hidden  mt-14">
+          <div className="p-4 ">{children}</div>
         </main>
       </SidebarInset>
     </SidebarProvider>
