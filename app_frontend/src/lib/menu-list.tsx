@@ -50,35 +50,11 @@ export function getMenuList(): Group[] {
           href: "/contacts",
           label: "Contacts",
           icon: Users,
-          submenus: [
-            {
-              icon: Eye,
-              href: "/contacts",
-              label: "All Contacts",
-            },
-            {
-              icon: UserPlus,
-              href: "/contacts/new",
-              label: "Add Contact",
-            },
-          ],
         },
         {
           href: "/leads",
           label: "Leads",
           icon: Users,
-          submenus: [
-            {
-              icon: Eye,
-              href: "/leads",
-              label: "All Leads",
-            },
-            {
-              icon: UserPlus,
-              href: "/leads/new",
-              label: "Add Lead",
-            },
-          ],
         },
       ],
     },
@@ -89,18 +65,6 @@ export function getMenuList(): Group[] {
           href: "/posts",
           label: "Posts",
           icon: SquarePen,
-          submenus: [
-            {
-              icon: SquarePen,
-              href: "/posts",
-              label: "All Posts",
-            },
-            {
-              icon: SquarePen,
-              href: "/posts/new",
-              label: "New Post",
-            },
-          ],
         },
         {
           href: "/categories",

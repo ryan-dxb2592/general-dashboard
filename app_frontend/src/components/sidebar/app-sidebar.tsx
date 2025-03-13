@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
   Sidebar,
@@ -18,6 +20,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 import { getMenuList } from "@/lib/menu-list";
 
@@ -27,6 +30,7 @@ import AppSidebarFooter from "./app-sidebar-footer";
 
 const AppSidebar = () => {
   const menuList = getMenuList();
+  const isMobile = useIsMobile();
 
   //   Dummy User
   const user = {
@@ -34,9 +38,6 @@ const AppSidebar = () => {
     email: "john.doe@example.com",
     image: "https://github.com/shadcn.png",
   };
-
-  //   Dummy isMobile
-  const isMobile = false;
 
   return (
     <Sidebar
@@ -48,15 +49,14 @@ const AppSidebar = () => {
       {/* Sidebar Header */}
       <div className="border-b">
         <SidebarHeader>
-          <SidebarMenu className="gap-2 border-sidebar-accent-foreground">
+          <SidebarMenu className="border-sidebar-accent-foreground">
             <SidebarMenuItem>
-              <SidebarMenuButton
-                size="lg"
-                className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                asChild
-              >
-                <Link href="/">
-                  <div className="flex justify-center items-center rounded-lg aspect-square size-8 bg-sidebar-primary text-sidebar-primary-foreground">
+              <SidebarMenuButton size="lg" asChild>
+                <Link
+                  href="/"
+                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex flex-row items-center gap-2.5"
+                >
+                  <div className="flex justify-center items-center rounded-lg aspect-square size-9 bg-sidebar-primary text-sidebar-primary-foreground">
                     <GalleryVerticalEnd />
                   </div>
                   <div className="grid flex-1 text-sm leading-tight text-left">
@@ -72,11 +72,11 @@ const AppSidebar = () => {
         </SidebarHeader>
       </div>
       {/* Sidebar Content */}
-      <SidebarContent>
+      <SidebarContent className="gap-0">
         {menuList.map((menuListItem, index) => (
-          <SidebarGroup key={menuListItem.groupLabel + index} className="py-1">
+          <SidebarGroup key={menuListItem.groupLabel + index}>
             {menuListItem.groupLabel && (
-              <SidebarGroupLabel className="text-xs">
+              <SidebarGroupLabel className="text-xs text-muted-foreground">
                 {menuListItem.groupLabel}
               </SidebarGroupLabel>
             )}
@@ -92,10 +92,13 @@ const AppSidebar = () => {
                     >
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                          <SidebarMenuButton tooltip={listItem.label}>
+                          <SidebarMenuButton
+                            tooltip={listItem.label}
+                            className="cursor-pointer"
+                          >
                             {listItem.icon && <listItem.icon />}
                             <span>{listItem.label}</span>
-                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+                            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90 " />
                           </SidebarMenuButton>
                         </CollapsibleTrigger>
 
@@ -106,7 +109,7 @@ const AppSidebar = () => {
                                 <SidebarMenuSubButton asChild>
                                   <Link
                                     href={item.href}
-                                    className="flex gap-2 items-center"
+                                    className="flex gap-2 items-center cursor-pointer"
                                   >
                                     {item.icon && <item.icon />}
                                     <span className="">{item.label}</span>
@@ -120,9 +123,11 @@ const AppSidebar = () => {
                     </Collapsible>
                   ) : (
                     <SidebarMenuItem>
-                      <SidebarMenuButton tooltip={listItem.label}>
-                        {listItem.icon && <listItem.icon />}
-                        <Link href={listItem.href}>{listItem.label}</Link>
+                      <SidebarMenuButton tooltip={listItem.label} asChild>
+                        <Link href={listItem.href}>
+                          {listItem.icon && <listItem.icon />}
+                          <span>{listItem.label}</span>
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   )}

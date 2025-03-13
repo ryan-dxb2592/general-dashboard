@@ -2,14 +2,12 @@
 
 import { useTheme } from "next-themes";
 import { MoonIcon, SunIcon } from "lucide-react";
-
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
   TooltipProvider,
+  TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 import { Button } from "@/components/ui/button";
 
 const ThemeToggle = () => {
@@ -20,7 +18,7 @@ const ThemeToggle = () => {
       <Tooltip delayDuration={100}>
         <TooltipTrigger asChild>
           <Button
-            className="rounded-full w-8 h-8 bg-background mr-2 relative"
+            className=" bg-transparent  mr-2 relative"
             variant="outline"
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
