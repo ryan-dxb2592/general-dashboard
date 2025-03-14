@@ -1,11 +1,17 @@
-"use client"
+"use client";
 
-import * as React from "react"
-import { ChevronLeft, ChevronRight } from "lucide-react"
-import { DayPicker } from "react-day-picker"
+import * as React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { DayPicker } from "react-day-picker";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 function Calendar({
   className,
@@ -15,13 +21,17 @@ function Calendar({
 }: React.ComponentProps<typeof DayPicker>) {
   return (
     <DayPicker
+      captionLayout="dropdown-buttons"
       showOutsideDays={showOutsideDays}
       className={cn("p-3", className)}
       classNames={{
+        caption_dropdowns:
+          "flex flex-row justify-center pt-1 relative items-center w-full text-sm",
         months: "flex flex-col sm:flex-row gap-2",
         month: "flex flex-col gap-4",
-        caption: "flex justify-center pt-1 relative items-center w-full",
-        caption_label: "text-sm font-medium",
+        caption:
+          "flex flex-row justify-center pt-1 relative items-center w-full",
+        caption_label: "text-sm font-medium hidden",
         nav: "flex items-center gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
@@ -60,16 +70,107 @@ function Calendar({
         ...classNames,
       }}
       components={{
+        Dropdown: ({ value, onChange, children, ...props }) => {
+          interface DropdownItemProps {
+            value: string;
+            children: React.ReactNode;
+            className?: string;
+            "data-value"?: string;
+          }
+
+          // Convert 0-based month to 1-based for display
+          const displayValue =
+            props.name === "months"
+              ? Number(props.name === "months" && value) + 1
+              : value;
+
+          const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+            const target = event.target as HTMLDivElement;
+            if (target.hasAttribute("data-value")) {
+              const clickedValue = target.getAttribute("data-value");
+              if (onChange && clickedValue) {
+                // Convert 1-based month back to 0-based when handling change
+                const adjustedValue =
+                  props.name === "months"
+                    ? String(Number(clickedValue) - 1)
+                    : clickedValue;
+
+                const syntheticEvent = {
+                  target: {
+                    value: adjustedValue,
+                  },
+                } as React.ChangeEvent<HTMLSelectElement>;
+                onChange(syntheticEvent);
+              }
+            }
+          };
+
+          return (
+            // <select
+            //   id="countries"
+            //   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            // >
+            //   <option selected>Choose a country</option>
+            //   <option value="US">United States</option>
+            //   <option value="CA">Canada</option>
+            //   <option value="FR">France</option>
+            //   <option value="DE">Germany</option>
+            // </select>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "w-[var(--radix-popper-anchor-width)] max-w-[75px] justify-center text-center font-normal text-sm",
+                    !displayValue && "text-muted-foreground"
+                  )}
+                >
+                  <span>
+                    {props.name === "months"
+                      ? props.caption?.toString().slice(0, 3) + "..."
+                      : props.caption}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent
+                className="w-fit p-0 max-h-72 overflow-y-auto"
+                align="end"
+              >
+                <div className="p-1" onClick={handleClick}>
+                  {React.Children.map(children, (child) => {
+                    if (React.isValidElement<DropdownItemProps>(child)) {
+                      // For months, convert the 0-based value to 1-based for display
+                      const itemValue =
+                        props.name === "months"
+                          ? String(Number(child.props.value) + 1)
+                          : child.props.value;
+
+                      return React.cloneElement(child, {
+                        className: cn(
+                          "cursor-pointer px-2 py-1 rounded hover:bg-accent text-sm",
+                          child.props.className,
+                          itemValue === displayValue && "bg-accent"
+                        ),
+                        "data-value": itemValue,
+                      });
+                    }
+                    return child;
+                  })}
+                </div>
+              </PopoverContent>
+            </Popover>
+          );
+        },
         IconLeft: ({ className, ...props }) => (
-          <ChevronLeft className={cn("size-4", className)} {...props} />
+          <ChevronLeft className={cn("size-3", className)} {...props} />
         ),
         IconRight: ({ className, ...props }) => (
-          <ChevronRight className={cn("size-4", className)} {...props} />
+          <ChevronRight className={cn("size-3", className)} {...props} />
         ),
       }}
       {...props}
     />
-  )
+  );
 }
 
-export { Calendar }
+export { Calendar };

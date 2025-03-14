@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, ChevronDown, UserPlus } from "lucide-react";
-import { format } from "date-fns";
+import { format, getYear } from "date-fns";
 import { cn } from "@/lib/utils";
 import {
   Popover,
@@ -43,7 +43,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import CustomDatePicker from "@/components/common/custom-date-picker";
+import CustomDatePicker from "@/components/custom-ui/custom-calendar";
+import { Calendar } from "../ui/calendar";
 
 const AddContact = () => {
   const form = useForm<ContactFormValues>({
@@ -125,12 +126,49 @@ const AddContact = () => {
                   control={form.control}
                   name="dateOfBirth"
                   render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="">Date of Birth</FormLabel>
-                      <CustomDatePicker
-                        value={field.value}
-                        onChange={field.onChange}
-                      />
+                    // <FormItem>
+                    //   <FormLabel className="">Date of Birth</FormLabel>
+                    //   {/* <CustomDatePicker /> */}
+                    //   <Calendar />
+                    //   <FormMessage />
+                    // </FormItem>
+                    <FormItem className="flex flex-col pt-2">
+                      <FormLabel className="mb-[2px]">
+                        Company Registration Date
+                      </FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full pl-3 text-left font-normal",
+                                !field.value && "text-muted-foreground"
+                              )}
+                            >
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="end">
+                          <Calendar
+                            mode="single"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            disabled={(date) =>
+                              date > new Date() || date < new Date("1900-01-01")
+                            }
+                            initialFocus
+                            fromDate={new Date(getYear(new Date()) - 100, 0, 1)}
+                            toDate={new Date()}
+                          />
+                        </PopoverContent>
+                      </Popover>
                       <FormMessage />
                     </FormItem>
                   )}
