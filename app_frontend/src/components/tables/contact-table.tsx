@@ -90,6 +90,7 @@ import {
   TrashIcon,
 } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
+import ContactDrawer from "@/components/drawers/contact-drawer";
 
 type Item = {
   id: string;
@@ -484,14 +485,16 @@ const ContactTable = () => {
             </AlertDialog>
           )}
           {/* Add user button */}
-          <Button className="ml-auto" variant="outline">
-            <PlusIcon
-              className="-ms-1 opacity-60"
-              size={16}
-              aria-hidden="true"
-            />
-            Add user
-          </Button>
+          <ContactDrawer>
+            <Button className="ml-auto" variant="outline">
+              <PlusIcon
+                className="-ms-1 opacity-60"
+                size={16}
+                aria-hidden="true"
+              />
+              Add user
+            </Button>
+          </ContactDrawer>
         </div>
       </div>
 
