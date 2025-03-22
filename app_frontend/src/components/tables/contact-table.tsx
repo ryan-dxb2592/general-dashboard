@@ -315,7 +315,10 @@ const ContactTable = () => {
   return (
     <div className="space-y-4">
       {/* Filters */}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div
+        className="flex flex-wrap items-center justify-between gap-3"
+        aria-hidden="true"
+      >
         <div className="flex items-center gap-3">
           {/* Filter by name or email */}
           <div className="relative">
